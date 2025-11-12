@@ -45,6 +45,9 @@ export default class Master extends Controller {
   }
 
   public async onSelectLocation(oEvent: ui5Event): Promise<void> {
+    //HACK THE FUTURE Challenge:
+    //When a location is selected, we want to route to a different page with the details for the camera image of that location
+    //The camera image GUID is different than the location guid, maybe you can write some code to get the correct one?
     const locationName = (oEvent.getParameter("value" as never) as string);
     
     if (!locationName) {

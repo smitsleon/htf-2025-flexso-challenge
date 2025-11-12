@@ -106,6 +106,9 @@ export default class Master extends Controller {
   }
 
   async produce() {
+    //HACK THE FUTURE Challenge:
+    //Write code to trigger AdminService.produce action 
+    //You can base yourself on existing action code from the symboltranslation app
     BusyIndicator.show();
     
     const contextBinding = this.getView()
@@ -128,6 +131,9 @@ export default class Master extends Controller {
   }
 
   async replaceCamera(event: ui5Event) {
+    //HACK THE FUTURE Challenge:
+    //Write code to trigger AdminService.replace action on the selected installation
+    //Some backend code will have to be implemented as well!
     const listItem = event.getParameter("listItem" as never) as any;
     
     if (!listItem) {

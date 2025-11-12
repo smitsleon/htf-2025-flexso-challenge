@@ -142,6 +142,9 @@ async function runInBackgroundProduce(
 }
 
 export const replaceInstallation = async (req: cds.Request) => {
+  //HACK THE FUTURE Challenge:
+  //An instellation refers to a product camera that is installed somewhere
+  //When an installation is broken, and there are cameras in stock, we should be able to replace the broken installation
   const { id } = req.data;
   const installation = await SELECT.from(Installation)
     .columns("product", "status")

@@ -5,6 +5,9 @@
     xmlns:vizFeeds="sap.viz.ui5.controls.common.feeds"
     xmlns:vizDataset="sap.viz.ui5.data">
     <Page id="sonarOverviewPage" title="{i18n>title}" class="sapUiContentPadding">
+        <!-- HACK THE FUTURE Challenge: Can we make the sonars dots appear more appealing? The
+        current format will be far from readable -->
+        <!-- Experiment with the viz properties, don't worry if it breaks-->
         <viz:VizFrame id="sonarBubble" uiConfig="{applicationSet:'fiori'}" height="600px"
             width="100%" vizType="bubble">
             <viz:dataset>

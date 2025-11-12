@@ -55,6 +55,8 @@ export default class SonarOverview extends Controller {
         const vizPopover = this.byId("sonarPopOver") as Popover;
         if (vizPopover) {
             vizPopover.setCustomDataControl( (selectedSonarReading: any) => {
+                //HACK THE FUTURE Challenge:
+                //We want to visualise our findings when clicked
                 const form = new SimpleForm({
                     content: [
                         new Label({ text: "Finding" }),

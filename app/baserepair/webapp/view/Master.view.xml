@@ -24,6 +24,10 @@
                 class="sapUiSmallMarginBottom sapUiResponsiveContentPadding">
                 <items>
                     <IconTabFilter id="_IDGenIconTabFilter" key="Parts" text="Parts">
+                        <!-- HACK THE FUTURE Challenge: Here we should have an overview of materials -->
+                        <!-- Can you display them as a table?-->
+                        <!-- It should be possible to perform the actions 'order' and 'refresh' on
+                        them-->
                         <Toolbar id="_IDGenToolbar2">
                             <Button id="_IDGenButton2" text="Order" press="order"
                                 enabled="{= ${view>/hasSelectedItems} }" />
@@ -77,6 +81,10 @@
                     </IconTabFilter>
                     <IconTabFilter id="_IDGenIconTabFilter2" key="Installations"
                         text="Installations">
+                        <!-- HACK THE FUTURE Challenge: Here we should have an overview of all
+                        installations of this product -->
+                        <!-- It should be possible to execute the function replaceCamera on an
+                        entry-->
                         <List id="idInstallationList"
                             items="{path: '/Installation', parameters: { $expand: 'subnauticLocation', $filter: 'product_ID eq 0a85863f-100d-4e0b-91a1-89897f4490d6' }}"
                             mode="SingleSelectMaster" selectionChange="replaceCamera">
