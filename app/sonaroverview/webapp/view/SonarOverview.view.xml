@@ -5,25 +5,33 @@
     xmlns:vizFeeds="sap.viz.ui5.controls.common.feeds"
     xmlns:vizDataset="sap.viz.ui5.data">
     <Page id="sonarOverviewPage" title="{i18n>title}" class="sapUiContentPadding">
-        <!-- HACK THE FUTURE Challenge: Can we make the sonars dots appear more appealing? The current format will be far from readable -->
-        <!-- Experiment with the viz properties, don't worry if it breaks-->
-        <viz:VizFrame id="sonarBubble" uiConfig="{applicationSet:'fiori'}" height="600px" width="100%" vizType="bubble">
+        <viz:VizFrame id="sonarBubble" uiConfig="{applicationSet:'fiori'}" height="600px"
+            width="100%" vizType="bubble">
             <viz:dataset>
-                <vizDataset:FlattenedDataset id="sonarDataset" data="{ path: '/Sonar', parameters: { $expand: 'sonarType,subnauticLocation' } }">
+                <vizDataset:FlattenedDataset id="sonarDataset"
+                    data="{ path: '/Sonar', parameters: { $expand: 'sonarType,subnauticLocation' } }">
                     <vizDataset:dimensions>
-                        <vizDataset:DimensionDefinition id="sonarFinding" name="SonarFinding" value="{finding}" />
+                        <vizDataset:DimensionDefinition id="sonarFinding" name="SonarFinding"
+                            value="{finding}" />
+                        <vizDataset:DimensionDefinition id="sonarTypeDim" name="SonarType"
+                            value="{sonarType/type}" />
                     </vizDataset:dimensions>
                     <vizDataset:measures>
-                        <vizDataset:MeasureDefinition id="hoursMeas" name="Hours" value="{hoursInPast}"/>
-                        <vizDataset:MeasureDefinition id="milesMeas" name="Miles" value="{milesFromBase}"/>
-                        <vizDataset:MeasureDefinition id="sizeMeas" name="Size" value="5"/>
+                        <vizDataset:MeasureDefinition id="hoursMeas" name="Hours"
+                            value="{hoursInPast}" />
+                        <vizDataset:MeasureDefinition id="milesMeas" name="Miles"
+                            value="{milesFromBase}" />
+                        <vizDataset:MeasureDefinition id="sizeMeas" name="Size" value="10" />
                     </vizDataset:measures>
                 </vizDataset:FlattenedDataset>
             </viz:dataset>
             <viz:feeds>
-                <vizFeeds:FeedItem id="feedValueAxis" uid="valueAxis" type="Measure" values="Hours"/>
-                <vizFeeds:FeedItem id="feedValueAxis2" uid="valueAxis2" type="Measure" values="Miles"/>
-                <vizFeeds:FeedItem id="feedBubbleWidth" uid="bubbleWidth" type="Measure" values="Size"/>
+                <vizFeeds:FeedItem id="feedValueAxis" uid="valueAxis" type="Measure" values="Hours" />
+                <vizFeeds:FeedItem id="feedValueAxis2" uid="valueAxis2" type="Measure"
+                    values="Miles" />
+                <vizFeeds:FeedItem id="feedBubbleWidth" uid="bubbleWidth" type="Measure"
+                    values="Size" />
+                <vizFeeds:FeedItem id="feedColor" uid="color" type="Dimension" values="SonarType" />
             </viz:feeds>
             <viz:dependents>
                 <viz:Popover id="sonarPopOver" />

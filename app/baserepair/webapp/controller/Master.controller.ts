@@ -106,9 +106,20 @@ export default class Master extends Controller {
   }
 
   async produce() {
-    //HACK THE FUTURE Challenge:
-    //Write code to trigger AdminService.produce action 
-    //You can base yourself on existing action code from the symboltranslation app
+    BusyIndicator.show();
+    
+    const contextBinding = this.getView()
+      ?.getModel()
+      ?.bindContext(
+        "/ProductCamera('0a85863f-100d-4e0b-91a1-89897f4490d6')/AdminService.produce(...)"
+      ) as ODataContextBinding;
+
+    if (contextBinding) {
+      await contextBinding.invoke();
+      this.refeshProducton();
+    }
+    
+    BusyIndicator.hide();
   }
 
   refeshProducton() {
@@ -117,9 +128,35 @@ export default class Master extends Controller {
   }
 
   async replaceCamera(event: ui5Event) {
-    const listItem = event.getParameter("listItem" as never) as ListItem;
-    //HACK THE FUTURE Challenge:
-    //Write code to trigger AdminService.replace action on the selected installation
-    //Some backend code will have to be implemented as well!
+    const listItem = event.getParameter("listItem" as never) as any;
+    
+    if (!listItem) {
+      return;
+    }
+    
+    BusyIndicator.show();
+    
+    try {
+      const installationId = listItem.getBindingContext()?.getProperty("ID");
+      
+      const contextBinding = this.getView()
+        ?.getModel()
+        ?.bindContext(
+          `${listItem.getBindingContext()?.getPath()}/AdminService.replace(...)`,
+          listItem.getBindingContext() as Context
+        ) as ODataContextBinding;
+
+      if (contextBinding) {
+        contextBinding.setParameter("id", installationId);
+        await contextBinding.invoke();
+        
+        // Refresh the view
+        this.getView()?.getModel()?.refresh();
+      }
+    } catch (error) {
+      console.error("Error replacing camera:", error);
+    }
+    
+    BusyIndicator.hide();
   }
 }

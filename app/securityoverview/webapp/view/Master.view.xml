@@ -3,7 +3,8 @@
     xmlns:m="sap.m"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:core="sap.ui.core">
-    <!-- HACK THE FUTURE Challenge: here we have code to represent the state when no location is selected--> 
+    <!-- HACK THE FUTURE Challenge: here we have code to represent the state when no location is
+    selected-->
     <!-- You will have to write XML controls for what happens when a location is selected -->
     <ObjectPageLayout
         id="id.ObjectPageLayout"
@@ -58,7 +59,24 @@
             <ObjectPageSection showTitle="false" visible="{appView>/hasSelectedLocation}">
                 <subSections>
                     <ObjectPageSubSection class="sapUxAPObjectPageSubSectionFitContainer">
-
+                        <m:VBox>
+                            <m:Title text="Camera Image Details" class="sapUiSmallMarginBottom" />
+                            <m:ObjectHeader
+                                title="{subnauticLocation/location}"
+                                number="{timestamp}"
+                                numberUnit="timestamp">
+                                <m:attributes>
+                                    <m:ObjectAttribute title="Location"
+                                        text="{subnauticLocation/location}" />
+                                    <m:ObjectAttribute title="Biome"
+                                        text="{subnauticLocation/biome}" />
+                                    <m:ObjectAttribute title="Depth"
+                                        text="{subnauticLocation/depth} m" />
+                                </m:attributes>
+                            </m:ObjectHeader>
+                            <m:Image src="{imageUrl}" width="100%" class="sapUiSmallMarginTop" />
+                            <m:Text text="{description}" class="sapUiSmallMarginTop" />
+                        </m:VBox>
                     </ObjectPageSubSection>
                 </subSections>
 

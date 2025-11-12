@@ -22,32 +22,52 @@ export default class Master extends Controller {
     this.appViewModel = new JSONModel({
       hasSelectedLocation: false
     });
+    this.getView()?.setModel(this.appViewModel, "appView");
   }
 
   private onRouteMatched(event: Route$MatchedEvent): void {
-    //Here we will also have to pass along the correct camera image guid to the view
-    //Once that happens, we can start filling our frontend with data about the camera image
-    //That way we will discovered what is happening at that location and possibly solve the mystery
-    let cameraImageGuid = "";
+    const routeName = event.getParameter("name");
 
-    if (event.getParameter("name") === "masterWithSelection") {
+    if (routeName === "masterWithSelection") {
+      const args = event.getParameter("arguments") as any;
+      const cameraImageGuid = args.id;
+      
       this.appViewModel.setProperty("/hasSelectedLocation", true);
-      this.getView()?.bindElement(
-        { path: `/CameraImages(${cameraImageGuid})` }
-      )
+      this.getView()?.bindElement({
+        path: `/CameraImages(${cameraImageGuid})`,
+        parameters: {
+          $expand: "subnauticLocation"
+        }
+      });
+    } else {
+      this.appViewModel.setProperty("/hasSelectedLocation", false);
     }
   }
 
-  public onSelectLocation(oEvent: ui5Event): void {
-    //HACK THE FUTURE Challenge:
-    //When a location is selected, we want to route to a different page with the details for the camera image of that location
-    //The camera image GUID is different than the location guid, maybe you can write some code to get the correct one?
-    let cameraImageGuid = "";
-
-    const router = (this.getOwnerComponent() as UIComponent).getRouter();
-    router.navTo("masterWithSelection", {
-      id: cameraImageGuid
-    });
+  public async onSelectLocation(oEvent: ui5Event): Promise<void> {
+    const locationName = (oEvent.getParameter("value" as never) as string);
+    
+    if (!locationName) {
+      return;
+    }
+    
+    // Get the camera image for the selected location
+    const oModel = this.getView()?.getModel();
+    const binding = oModel?.bindList("/CameraImages", undefined, undefined, undefined, {
+      $expand: "subnauticLocation",
+      $filter: `subnauticLocation/location eq '${locationName}'`
+    }) as any;
+    
+    const contexts = await binding?.requestContexts(0, 1);
+    
+    if (contexts && contexts.length > 0) {
+      const cameraImageGuid = contexts[0].getProperty("ID");
+      
+      const router = (this.getOwnerComponent() as UIComponent).getRouter();
+      router.navTo("masterWithSelection", {
+        id: cameraImageGuid
+      });
+    }
   }
 
 }

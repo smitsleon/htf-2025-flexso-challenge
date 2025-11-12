@@ -55,8 +55,19 @@ export default class SonarOverview extends Controller {
         const vizPopover = this.byId("sonarPopOver") as Popover;
         if (vizPopover) {
             vizPopover.setCustomDataControl( (selectedSonarReading: any) => {
-                //HACK THE FUTURE Challenge:
-                //We want to visualise our findings when clicked
+                const form = new SimpleForm({
+                    content: [
+                        new Label({ text: "Finding" }),
+                        new Text({ text: selectedSonarReading.data.SonarFinding }),
+                        new Label({ text: "Hours in Past" }),
+                        new Text({ text: selectedSonarReading.data.Hours }),
+                        new Label({ text: "Miles from Base" }),
+                        new Text({ text: selectedSonarReading.data.Miles }),
+                        new Label({ text: "Sonar Type" }),
+                        new Text({ text: selectedSonarReading.data.SonarType || "Unknown" })
+                    ]
+                });
+                return form;
             })
             vizPopover.connect(oViz.getVizUid());
             vizPopover.setFormatString(ChartFormatter.DefaultPattern.STANDARDFLOAT);

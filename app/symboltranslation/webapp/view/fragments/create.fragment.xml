@@ -7,7 +7,8 @@
     <Dialog id="_IDGenDialog" title="Add new symbol" draggable="true">
         <content>
             <VBox class="sapUiSmallMargin" id="formContainer">
-                <f:SimpleForm id="SimpleFormChangeColumn_twoGroups234" editable="true" layout="ColumnLayout" columnsM="2" columnsL="2" columnsXL="2">
+                <f:SimpleForm id="SimpleFormChangeColumn_twoGroups234" editable="true"
+                    layout="ColumnLayout" columnsM="2" columnsL="2" columnsXL="2">
                     <f:content>
                         <Label id="_IDGenLabel2" text="Icon" />
                         <Input id="_IDGenInput1" required="true" value="{create>/symbol}" />
@@ -21,7 +22,10 @@
             <Toolbar id="_IDGenToolbar">
                 <content>
                     <ToolbarSpacer id="_IDGenToolbarSpacer4" />
-                    <Button id="_IDGenButton4" text="Reject" type="Reject" press="closeDialog" ariaHasPopup="Dialog" />
+                    <Button id="_IDGenButton5" text="Save" type="Accept" press="saveSymbol"
+                        ariaHasPopup="Dialog" />
+                    <Button id="_IDGenButton4" text="Reject" type="Reject" press="closeDialog"
+                        ariaHasPopup="Dialog" />
                 </content>
             </Toolbar>
         </footer>

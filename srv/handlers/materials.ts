@@ -142,14 +142,31 @@ async function runInBackgroundProduce(
 }
 
 export const replaceInstallation = async (req: cds.Request) => {
-  //HACK THE FUTURE Challenge:
-  //An instellation refers to a product camera that is installed somewhere
-  //When an installation is broken, and there are cameras in stock, we should be able to replace the broken installation
   const { id } = req.data;
   const installation = await SELECT.from(Installation)
     .columns("product", "status")
     .where({ ID: id });
 
   const productID = installation[0].product;
-
+  
+  // Check if there are cameras in stock
+  const camera = await SELECT.from(ProductCamera)
+    .columns("amountInStock")
+    .where({ ID: productID });
+  
+  if (camera && camera[0].amountInStock > 0) {
+    // Replace the installation - set status to working
+    await UPDATE.entity(Installation)
+      .set({ status: "Working" })
+      .where({ ID: id });
+    
+    // Reduce stock by 1
+    await UPDATE.entity(ProductCamera)
+      .set({ amountInStock: camera[0].amountInStock - 1 })
+      .where({ ID: productID });
+    
+    return { success: true, message: "Installation replaced successfully" };
+  } else {
+    return { success: false, message: "No cameras in stock" };
+  }
 };
