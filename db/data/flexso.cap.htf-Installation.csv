@@ -1,8 +1,8 @@
 ID;product;status;image;location
 e6359b4b-0a6c-477c-b0c5-886fb4f2d5d0;0a85863f-100d-4e0b-91a1-89897f4490d6;Damaged;sap-icon://video;North-Left
-38547b25-036d-4baa-9465-1960be5a2d45;0a85863f-100d-4e0b-91a1-89897f4490d6;Fine;sap-icon://video;North-center
-d24f9cc7-345f-48d7-ad05-83c4736faf53;0a85863f-100d-4e0b-91a1-89897f4490d6;Fine;sap-icon://video;North-right
+38547b25-036d-4baa-9465-1960be5a2d45;0a85863f-100d-4e0b-91a1-89897f4490d6;Working;sap-icon://video;North-center
+d24f9cc7-345f-48d7-ad05-83c4736faf53;0a85863f-100d-4e0b-91a1-89897f4490d6;Working;sap-icon://video;North-right
 bb5bf20c-4795-4a07-af5a-474c700e4b03;0a85863f-100d-4e0b-91a1-89897f4490d6;Damaged;sap-icon://video;East-center
 eb80bebc-9591-4695-810b-1a8af6141483;0a85863f-100d-4e0b-91a1-89897f4490d6;Damaged;sap-icon://video;East-right
-144bf246-423f-4904-b6b3-35ca8bd1e011;0a85863f-100d-4e0b-91a1-89897f4490d6;Fine;sap-icon://video;West-center
+144bf246-423f-4904-b6b3-35ca8bd1e011;0a85863f-100d-4e0b-91a1-89897f4490d6;Working;sap-icon://video;West-center
 9c2ba723-9b74-4f37-b44a-8fc792c41dc6;0a85863f-100d-4e0b-91a1-89897f4490d6;Damaged;sap-icon://video;West-left

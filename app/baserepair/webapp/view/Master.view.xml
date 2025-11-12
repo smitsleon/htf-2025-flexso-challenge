@@ -11,41 +11,105 @@
             <ObjectHeader id="_IDGenObjectHeader" title="{name}" backgroundDesign="Solid">
                 <attributes>
                     <ObjectAttribute id="_IDGenObjectAttribute1" title="Weight" text="{weight}" />
-                    <ObjectAttribute id="_IDGenObjectAttribute2" title="Dimensions" text="{dimensions}" />
+                    <ObjectAttribute id="_IDGenObjectAttribute2" title="Dimensions"
+                        text="{dimensions}" />
                     <ObjectAttribute id="_IDGenObjectAttribute" title="Color" text="{color}" />
                 </attributes>
                 <statuses>
-                    <ObjectStatus id="_IDGenObjectStatus" title="Amount in Stock" text="{amountInStock}" state="Success" />
+                    <ObjectStatus id="_IDGenObjectStatus" title="Amount in Stock"
+                        text="{amountInStock}" state="Success" />
                 </statuses>
             </ObjectHeader>
-            <IconTabBar id="_IDGenIconTabBar" expanded="true" class="sapUiSmallMarginBottom sapUiResponsiveContentPadding">
+            <IconTabBar id="_IDGenIconTabBar" expanded="true"
+                class="sapUiSmallMarginBottom sapUiResponsiveContentPadding">
                 <items>
                     <IconTabFilter id="_IDGenIconTabFilter" key="Parts" text="Parts">
                         <!-- HACK THE FUTURE Challenge: Here we should have an overview of materials -->
                         <!-- Can you display them as a table?-->
-                        <!-- It should be possible to perform the actions 'order' and 'refresh' on them-->
-
+                        <!-- It should be possible to perform the actions 'order' and 'refresh' on
+                        them-->
+                        <Toolbar id="_IDGenToolbar2">
+                            <Button id="_IDGenButton2" text="Order" press="order"
+                                enabled="{= ${view>/hasSelectedItems} }" />
+                            <Button id="_IDGenButton3" icon="sap-icon://synchronize"
+                                type="Transparent" press="refresh" />
+                        </Toolbar>
+                        <Table id="idMaterialTable" mode="MultiSelect" items="{path: 'materials'}">
+                            <columns>
+                                <Column id="_IDGenColumn1">
+                                    <Text id="_IDGenText1" text="Name" />
+                                </Column>
+                                <Column id="_IDGenColumn2">
+                                    <Text id="_IDGenText2" text="Amount in Stock" />
+                                </Column>
+                                <Column id="_IDGenColumn3">
+                                    <Text id="_IDGenText3" text="Amount Ordered" />
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem id="_IDGenColumnListItem" type="Active">
+                                    <cells>
+                                        <Text id="_IDGenText4" text="{name}" />
+                                        <Text id="_IDGenText5" text="{amountInStock}" />
+                                        <Text id="_IDGenText6" text="{amountOrderd}" />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
                     </IconTabFilter>
                     <IconTabFilter id="_IDGenIconTabFilter1" key="Production" text="Production">
                         <Button id="_IDGenButton" text="Produce {name}" press="produce"></Button>
-                        <Button id="_IDGenButton5" icon="sap-icon://synchronize" type="Transparent" press="refeshProducton"></Button>
-                        <m:ProcessFlow id="processflow" scrollable="true" lanes="{
-							path: '/Production',
-							parameters: {
-								$expand: {
-                                    state: {
-                                    $select: ['state','value'] }
-                                }
-							}
-						}">
-                            <m:lanes>
-                                <m:ProcessFlowLaneHeader id="_IDGenProcessFlowLaneHeader" laneId="{ID}" iconSrc="{icon}" text="{label}" position="{position}" state="{path: 'state', formatter:'.formatter.stateFormatter', targetType:'any'}" />
-                            </m:lanes>
-                        </m:ProcessFlow>
+                        <Button id="_IDGenButton5" icon="sap-icon://synchronize" type="Transparent"
+                            press="refeshProducton"></Button>
+                        <VBox class="sapUiSmallMargin">
+                            <MessageStrip
+                                text="Production stages will update after clicking Produce"
+                                type="Information"
+                                showIcon="true" />
+                            <List
+                                items="{path: '/Production', parameters: { $expand: 'state', $orderby: 'position' }}">
+                                <CustomListItem>
+                                    <HBox alignItems="Center" class="sapUiSmallMarginTopBottom">
+                                        <core:Icon src="{icon}" size="2rem"
+                                            class="sapUiSmallMarginEnd" />
+                                        <VBox class="sapUiSmallMarginEnd" width="200px">
+                                            <Title text="{label}" level="H5" />
+                                            <Text text="Position: {position}" />
+                                        </VBox>
+                                        <VBox>
+                                            <ObjectStatus
+                                                text="{= ${state/0/state} || 'Not Started' }"
+                                                state="{= ${state/0/state} === 'Neutral' ? 'Warning' : ${state/0/state} === 'Positive' ? 'Success' : 'None' }" />
+                                            <Text text="Value: {= ${state/0/value} || '0' }" />
+                                        </VBox>
+                                    </HBox>
+                                </CustomListItem>
+                            </List>
+                        </VBox>
                     </IconTabFilter>
-                    <IconTabFilter id="_IDGenIconTabFilter2" key="Installations" text="Installations">
-                        <!-- HACK THE FUTURE Challenge: Here we should have an overview of all installations of this product -->
-                        <!-- It should be possible to execute the function replaceCamera on an entry-->
+                    <IconTabFilter id="_IDGenIconTabFilter2" key="Installations"
+                        text="Installations">
+                        <!-- HACK THE FUTURE Challenge: Here we should have an overview of all
+                        installations of this product -->
+                        <!-- It should be possible to execute the function replaceCamera on an
+                        entry-->
+                        <MessageStrip
+                            text="Click on a damaged camera installation to repair it. Stock cameras available: {/ProductCamera('0a85863f-100d-4e0b-91a1-89897f4490d6')/amountInStock}"
+                            type="Information"
+                            showIcon="true"
+                            class="sapUiSmallMarginBottom">
+                        </MessageStrip>
+                        <List id="idInstallationList"
+                            items="{path: '/Installation', parameters: { $filter: 'product eq 0a85863f-100d-4e0b-91a1-89897f4490d6' }}"
+                            mode="SingleSelectMaster" selectionChange="replaceCamera">
+                            <StandardListItem id="_IDGenStandardListItem"
+                                title="{location}"
+                                description="Status: {status}"
+                                info="{status}"
+                                infoState="{= ${status} === 'Damaged' ? 'Error' : 'Success' }"
+                                icon="{= ${status} === 'Damaged' ? 'sap-icon://alert' : 'sap-icon://accept' }"
+                                type="Active" />
+                        </List>
                     </IconTabFilter>
                 </items>
             </IconTabBar>

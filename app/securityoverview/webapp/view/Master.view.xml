@@ -3,7 +3,8 @@
     xmlns:m="sap.m"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:core="sap.ui.core">
-    <!-- HACK THE FUTURE Challenge: here we have code to represent the state when no location is selected--> 
+    <!-- HACK THE FUTURE Challenge: here we have code to represent the state when no location is
+    selected-->
     <!-- You will have to write XML controls for what happens when a location is selected -->
     <ObjectPageLayout
         id="id.ObjectPageLayout"
@@ -22,23 +23,32 @@
         <headerContent>
             <ObjectPageDynamicHeaderTitle>
                 <content>
-                    <m:HBox>
-                        <m:Input
-                            class="sapUiTinyMargin"
-                            placeholder="Enter the area you want to observe"
-                            change="onSelectLocation"
-                        />
-                        <m:VBox binding="{path:'/checkCameraAvailability()'}">
-                            <core:Icon src="sap-icon://video"
-                                visible="{value}"
-                                color="Positive"
-                                tooltip="All cameras available" />
-                            <core:Icon src="sap-icon://error"
-                                visible="{= !${value} }"
-                                color="Negative"
-                                tooltip="There are cameras down" />
-                        </m:VBox>
-                    </m:HBox>
+                    <m:VBox width="100%">
+                        <m:HBox>
+                            <m:Input
+                                id="locationInput"
+                                class="sapUiTinyMargin"
+                                placeholder="Enter the area you want to observe"
+                                change="onSelectLocation"
+                            />
+                            <m:VBox>
+                                <core:Icon src="sap-icon://video"
+                                    visible="{appView>/allCamerasAvailable}"
+                                    color="Positive"
+                                    tooltip="All cameras available" />
+                                <core:Icon src="sap-icon://error"
+                                    visible="{= !${appView>/allCamerasAvailable} }"
+                                    color="Negative"
+                                    tooltip="There are cameras down" />
+                            </m:VBox>
+                        </m:HBox>
+                        <m:MessageStrip
+                            text="🔍 Tip: Search for keywords like 'leviathan', 'immense', 'unknown' to find the monster!"
+                            type="Information"
+                            showIcon="true"
+                            class="sapUiSmallMarginTop">
+                        </m:MessageStrip>
+                    </m:VBox>
 
                 </content>
             </ObjectPageDynamicHeaderTitle>
@@ -48,17 +58,69 @@
             <ObjectPageSection showTitle="false" visible="{= !${appView>/hasSelectedLocation} }">
                 <subSections>
                     <ObjectPageSubSection class="sapUxAPObjectPageSubSectionFitContainer">
-                        <m:IllustratedMessage
-                            title="No camera images"
-                            description="Please assign a location to observe."
-                        />
+                        <m:VBox>
+                            <m:Title text="All Camera Recordings" class="sapUiSmallMarginBottom" />
+                            <m:SearchField
+                                id="cameraSearchField"
+                                placeholder="Search recordings (e.g., leviathan, immense, unknown)..."
+                                width="100%"
+                                search="onSearchCameras"
+                                liveChange="onSearchCameras"
+                                class="sapUiSmallMarginBottom" />
+                            <m:List
+                                id="cameraList"
+                                items="{
+                                    path: '/CameraImages',
+                                    parameters: {
+                                        $expand: 'subnauticLocation'
+                                    }
+                                }"
+                                mode="SingleSelectMaster"
+                                selectionChange="onCameraSelected">
+                                <m:StandardListItem
+                                    title="{subnauticLocation/name}"
+                                    description="{recording}"
+                                    info="{subnauticLocation/description}"
+                                    type="Active"
+                                    icon="{= ${recording} &amp;&amp; (${recording}.toLowerCase().indexOf('leviathan') >= 0 || ${recording}.toLowerCase().indexOf('immense') >= 0 || ${recording}.toLowerCase().indexOf('unknown') >= 0) ? 'sap-icon://alert' : 'sap-icon://video' }"
+                                    highlight="{= ${recording} &amp;&amp; (${recording}.toLowerCase().indexOf('leviathan') >= 0 || ${recording}.toLowerCase().indexOf('immense') >= 0 || ${recording}.toLowerCase().indexOf('unknown') >= 0) ? 'Error' : 'None' }" />
+                            </m:List>
+                        </m:VBox>
                     </ObjectPageSubSection>
                 </subSections>
             </ObjectPageSection>
             <ObjectPageSection showTitle="false" visible="{appView>/hasSelectedLocation}">
                 <subSections>
                     <ObjectPageSubSection class="sapUxAPObjectPageSubSectionFitContainer">
-
+                        <m:VBox>
+                            <m:Title text="Camera Recording Details" class="sapUiSmallMarginBottom" />
+                            <m:MessageStrip
+                                text="⚠️ ALERT: This recording contains suspicious activity - possible leviathan/monster detected!"
+                                type="Error"
+                                showIcon="true"
+                                visible="{= ${recording}.toLowerCase().indexOf('leviathan') >= 0 || ${recording}.toLowerCase().indexOf('immense') >= 0 || ${recording}.toLowerCase().indexOf('unknown') >= 0 }"
+                                class="sapUiSmallMarginBottom">
+                            </m:MessageStrip>
+                            <m:ObjectHeader
+                                title="{subnauticLocation/name}"
+                                icon="{= ${recording} &amp;&amp; (${recording}.toLowerCase().indexOf('leviathan') >= 0 || ${recording}.toLowerCase().indexOf('immense') >= 0 || ${recording}.toLowerCase().indexOf('unknown') >= 0) ? 'sap-icon://alert' : 'sap-icon://video' }">
+                                <m:attributes>
+                                    <m:ObjectAttribute title="Location"
+                                        text="{subnauticLocation/name}" />
+                                    <m:ObjectAttribute title="Description"
+                                        text="{subnauticLocation/description}" />
+                                </m:attributes>
+                                <m:statuses>
+                                    <m:ObjectStatus
+                                        text="{= ${recording} &amp;&amp; (${recording}.toLowerCase().indexOf('leviathan') >= 0 || ${recording}.toLowerCase().indexOf('immense') >= 0 || ${recording}.toLowerCase().indexOf('unknown') >= 0) ? '⚠️ THREAT DETECTED' : 'All Clear' }"
+                                        state="{= ${recording} &amp;&amp; (${recording}.toLowerCase().indexOf('leviathan') >= 0 || ${recording}.toLowerCase().indexOf('immense') >= 0 || ${recording}.toLowerCase().indexOf('unknown') >= 0) ? 'Error' : 'Success' }" />
+                                </m:statuses>
+                            </m:ObjectHeader>
+                            <m:VBox class="sapUiSmallMarginTop">
+                                <m:Label text="Recording:" class="sapUiTinyMarginBottom" />
+                                <m:Text text="{recording}" />
+                            </m:VBox>
+                        </m:VBox>
                     </ObjectPageSubSection>
                 </subSections>
 
