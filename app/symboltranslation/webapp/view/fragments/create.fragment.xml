@@ -15,21 +15,21 @@
                         <Label id="_IDGenLabel3" text="Where abouts" />
                         <Input id="_IDGenInput2" required="true" value="{create>/whereFound}" />
                         <Label id="_IDGenLabel4" text="Language" />
-                        <Input id="_IDGenInput3" required="true" value="{create>/language}" />
+                        <ComboBox id="_IDGenComboBox1" 
+                            required="true" 
+                            selectedKey="{create>/language}"
+                            items="{/Languages}">
+                            <core:Item key="{language}" text="{language}" />
+                        </ComboBox>
                     </f:content>
                 </f:SimpleForm>
             </VBox>
         </content>
-        <footer>
-            <Toolbar id="_IDGenToolbar">
-                <content>
-                    <ToolbarSpacer id="_IDGenToolbarSpacer4" />
-                    <Button id="_IDGenButton5" text="Save" type="Accept" press="saveSymbol"
-                        ariaHasPopup="Dialog" />
-                    <Button id="_IDGenButton4" text="Reject" type="Reject" press="closeDialog"
-                        ariaHasPopup="Dialog" />
-                </content>
-            </Toolbar>
-        </footer>
+        <beginButton>
+            <Button id="_IDGenButton5" text="Save" type="Accept" press="save" />
+        </beginButton>
+        <endButton>
+            <Button id="_IDGenButton4" text="Cancel" type="Reject" press="closeDialog" />
+        </endButton>
     </Dialog>
 </core:FragmentDefinition>

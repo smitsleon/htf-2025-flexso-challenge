@@ -42,7 +42,7 @@ export default class Master extends Controller {
     this.creationDialog.open();
   }
 
-  save() {
+  async save() {
     //This is save logic for creating a new Symbol
     const listBinding = this.getView()
       ?.getModel()
@@ -50,11 +50,24 @@ export default class Master extends Controller {
 
     const data = this.creationDialog.getModel("create");
 
-    listBinding.create({
+    const newContext = listBinding.create({
       symbol: data?.getProperty("/symbol") as string,
       whereFound: data?.getProperty("/whereFound") as string,
       language: data?.getProperty("/language") as string,
     });
+
+    // Wait for the create to complete
+    await newContext.created();
+
+    // Now translate the newly created symbol
+    const contextBinding = this.getView()
+      ?.getModel()
+      ?.bindContext(
+        `${newContext.getPath()}/AdminService.translateSymbolBound(...)`,
+        newContext
+      ) as ODataContextBinding;
+
+    await contextBinding.invoke();
 
     this.creationDialog.close();
     (this.table.getBinding("items") as Binding).refresh();
