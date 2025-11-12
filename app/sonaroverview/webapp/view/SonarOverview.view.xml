@@ -26,14 +26,15 @@
                         <vizDataset:DimensionDefinition id="sonarFinding" name="SonarFinding"
                             value="{finding}" />
                         <vizDataset:DimensionDefinition id="sonarTypeDim" name="SonarType"
-                            value="{sonarType/type}" />
+                            value="{sonarType/typeName}" />
                     </vizDataset:dimensions>
                     <vizDataset:measures>
                         <vizDataset:MeasureDefinition id="hoursMeas" name="Hours"
                             value="{hoursInPast}" />
                         <vizDataset:MeasureDefinition id="milesMeas" name="Miles"
                             value="{milesFromBase}" />
-                        <vizDataset:MeasureDefinition id="sizeMeas" name="Size" value="10" />
+                        <vizDataset:MeasureDefinition id="sizeMeas" name="Size"
+                            value="{signalStrength}" />
                     </vizDataset:measures>
                 </vizDataset:FlattenedDataset>
             </viz:dataset>
