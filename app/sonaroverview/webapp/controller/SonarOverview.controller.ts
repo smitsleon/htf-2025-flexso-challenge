@@ -9,6 +9,7 @@ import Label from "sap/m/Label";
 import Text from "sap/m/Text";
 import Dataset from "sap/viz/ui5/data/Dataset";
 import FlattenedDataset from "sap/viz/ui5/data/FlattenedDataset";
+import JSONModel from "sap/ui/model/json/JSONModel";
 /**
  * @namespace flexso.cap.hrf.sonaroverview.controller
  */
@@ -16,7 +17,65 @@ export default class SonarOverview extends Controller {
     selectedSonarReading: any;
 
     public onInit(): void {
+        // Initialize view model for attacker information
+        const oViewModel = new JSONModel({
+            attackerDistance: undefined,
+            attackerLastSeen: undefined,
+            attackerFinding: undefined
+        });
+        this.getView()?.setModel(oViewModel, "view");
+        
         this._initVizFrame();
+        this._findAttackerDistance();
+    }
+
+    private async _findAttackerDistance(): Promise<void> {
+        //HACK THE FUTURE Challenge:
+        //Discover the current distance of the attacker
+        const oModel = this.getOwnerComponent()?.getModel() as any;
+        const oBinding = oModel.bindList("/Sonar", undefined, undefined, undefined, {
+            $expand: "sonarType",
+            $orderby: "hoursInPast asc",
+            $top: 5
+        });
+        
+        await oBinding.requestContexts(0, 5);
+        const aContexts = oBinding.getContexts();
+        
+        // Zoek naar de meest recente leviathan/attacker finding
+        for (const oContext of aContexts) {
+            const oData = oContext.getObject();
+            const finding = oData.finding?.toLowerCase() || "";
+            const sonarType = oData.sonarType?.type?.toLowerCase() || "";
+            
+            // Check of het een leviathan/attacker is
+            if (finding.includes("leviathan") || finding.includes("attacker") || 
+                finding.includes("unknown") && finding.includes("massive") ||
+                sonarType.includes("leviathan")) {
+                
+                // Bereken de huidige afstand
+                const currentDistance = this._calculateCurrentDistance(
+                    oData.hoursInPast, 
+                    oData.milesFromBase
+                );
+                
+                // Toon de afstand in de view
+                const oViewModel = this.getView()?.getModel("view") as JSONModel;
+                if (oViewModel) {
+                    oViewModel.setProperty("/attackerDistance", currentDistance);
+                    oViewModel.setProperty("/attackerLastSeen", oData.hoursInPast);
+                    oViewModel.setProperty("/attackerFinding", oData.finding);
+                }
+                
+                break; // Stop na de eerste (meest recente) match
+            }
+        }
+    }
+    
+    private _calculateCurrentDistance(hoursInPast: number, milesFromBase: number): number {
+        // Als de leviathan 1 uur geleden op 35 miles was en nu (0 uur geleden) nog steeds daar is,
+        // dan is de huidige afstand gewoon de milesFromBase van de meest recente reading
+        return Math.round(milesFromBase * 10) / 10;
     }
 
     private async _initVizFrame(): Promise<void> { 

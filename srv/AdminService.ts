@@ -31,7 +31,8 @@ export = (srv: cds.Service) => {
     return handlerMaterial.replaceInstallation(req);
   });
 
-  srv.before("READ", "CameraImages", req => handlerCamera.checkCameraAvailability(req));
+  // Removed the before READ check that was blocking all CameraImages reads
+  // srv.before("READ", "CameraImages", req => handlerCamera.checkCameraAvailability(req));
 
   srv.on("checkCameraAvailability", async (req) => {
     return handlerCamera.areAllCamerasAvailable(req);

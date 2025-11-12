@@ -19,6 +19,13 @@ export default class Master extends Controller {
   /*eslint-disable @typescript-eslint/no-empty-function*/
   public onInit(): void {
     this.table = this.byId("idProductsTable") as Table;
+    
+    // Create view model for DynamicPage properties
+    const viewModel = new JSONModel({
+      headerExpanded: true,
+      titleClickable: true
+    });
+    this.getView()?.setModel(viewModel, "view");
   }
 
   async addIcon() {

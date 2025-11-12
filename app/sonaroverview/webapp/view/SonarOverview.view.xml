@@ -3,8 +3,17 @@
     xmlns="sap.m"
     xmlns:viz="sap.viz.ui5.controls"
     xmlns:vizFeeds="sap.viz.ui5.controls.common.feeds"
-    xmlns:vizDataset="sap.viz.ui5.data">
+    xmlns:vizDataset="sap.viz.ui5.data"
+    xmlns:core="sap.ui.core">
     <Page id="sonarOverviewPage" title="{i18n>title}" class="sapUiContentPadding">
+        <!-- HACK THE FUTURE Challenge: Show the current distance of the attacker -->
+        <MessageStrip
+            text="⚠️ THREAT ALERT: Unknown Leviathan detected at {view>/attackerDistance} miles from base! Last seen {view>/attackerLastSeen} hour(s) ago."
+            type="Error"
+            showIcon="true"
+            visible="{= ${view>/attackerDistance} !== undefined}"
+            class="sapUiSmallMarginBottom">
+        </MessageStrip>
         <!-- HACK THE FUTURE Challenge: Can we make the sonars dots appear more appealing? The
         current format will be far from readable -->
         <!-- Experiment with the viz properties, don't worry if it breaks-->

@@ -3,7 +3,8 @@
     xmlns="sap.m"
     xmlns:f="sap.f"
     xmlns:layout="sap.ui.layout" height="100%">
-    <f:DynamicPage id="dynamicPageId" headerExpanded="{/headerExpanded}" toggleHeaderOnTitleClick="{/titleClickable}">
+    <f:DynamicPage id="dynamicPageId" headerExpanded="{view>/headerExpanded}"
+        toggleHeaderOnTitleClick="{view>/titleClickable}">
         <!-- DynamicPage Title -->
         <f:title>
             <f:DynamicPageTitle>
@@ -27,12 +28,14 @@
             <f:DynamicPageHeader pinnable="true" />
         </f:header>
         <f:content>
-            <Table id="idProductsTable" sticky="HeaderToolbar,ColumnHeaders" inset="false" items="{
+            <Table id="idProductsTable" sticky="HeaderToolbar,ColumnHeaders" inset="false"
+                items="{
 							path: '/Symbols',
 							sorter: {
 								path: 'symbol'
 							}
-						}" class="sapFDynamicPageAlignContent" width="auto" mode="MultiSelect">
+						}"
+                class="sapFDynamicPageAlignContent" width="auto" mode="MultiSelect">
                 <headerToolbar>
                     <Toolbar>
                         <Title text="Symbols" level="H2" />
