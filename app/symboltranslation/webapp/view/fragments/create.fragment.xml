@@ -14,6 +14,8 @@
                         <Input id="_IDGenInput1" required="true" value="{create>/symbol}" />
                         <Label id="_IDGenLabel3" text="Where abouts" />
                         <Input id="_IDGenInput2" required="true" value="{create>/whereFound}" />
+                        <Label id="_IDGenLabel4" text="Language" />
+                        <Input id="_IDGenInput3" required="true" value="{create>/language}" />
                     </f:content>
                 </f:SimpleForm>
             </VBox>
